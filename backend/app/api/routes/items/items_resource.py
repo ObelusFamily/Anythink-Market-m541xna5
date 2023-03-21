@@ -27,6 +27,7 @@ from app.services.event import send_event
 
 router = APIRouter()
 
+
 @router.get("", response_model=ListOfItemsInResponse, name="items:list-items")
 async def list_items(
     items_filters: ItemsFilters = Depends(get_items_filters),
