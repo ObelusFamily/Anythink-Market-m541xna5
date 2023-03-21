@@ -73,9 +73,9 @@ async def create_new_item(
         )
     if item_create.image == "":
         response = openai.Image.create(
-        prompt=item_create.title,
-        n=1,
-        size="256x256")
+            prompt=item_create.title,
+            n=1,
+            size="256x256")
         item_create.image = response['data'][0]['url']
     item = await items_repo.create_item(
         slug=slug,
