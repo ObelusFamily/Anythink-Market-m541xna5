@@ -1,3 +1,5 @@
+import openai
+
 from typing import Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Response
@@ -26,7 +28,6 @@ from app.services.items import check_item_exists, get_slug_for_item
 from app.services.event import send_event
 
 router = APIRouter()
-
 
 @router.get("", response_model=ListOfItemsInResponse, name="items:list-items")
 async def list_items(
@@ -58,6 +59,8 @@ async def list_items(
     name="items:create-item",
 )
 async def create_new_item(
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+
     item_create: ItemInCreate = Body(..., embed=True, alias="item"),
     user: User = Depends(get_current_user_authorizer()),
     items_repo: ItemsRepository = Depends(get_repository(ItemsRepository)),
@@ -70,7 +73,7 @@ async def create_new_item(
         )
     if item_create.image == None:
         response = openai.Image.create(
-        prompt="a white siamese cat",
+        prompt=item_create.title,
         n=1,
         size="256x256"
         )
